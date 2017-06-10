@@ -32,3 +32,14 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+*.orig
+.~lock.*
+*.lnk
+Thumbs.db
+ehthumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+sysinfo.txt
