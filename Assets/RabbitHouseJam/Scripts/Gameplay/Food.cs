@@ -3,7 +3,7 @@
 public class Food : MonoBehaviour
 {
     public const float ROTATION_SPEED = 2.5f;
-    public const float DEATH_DURATION = 0.25f;
+    public const float DEATH_DURATION = 0.2f;
     public const float END_SCALE = 1.7f;
     private bool _dying;
     private float _deathTime;
@@ -28,7 +28,7 @@ public class Food : MonoBehaviour
             else
             {
                 _deathTime += Time.deltaTime;
-                float s = Easing.QuadEaseIn(_deathTime, 1.1f, END_SCALE, DEATH_DURATION);
+                float s = Easing.SineEaseIn(_deathTime, 1.1f, END_SCALE, DEATH_DURATION);
                 this.transform.localScale = new Vector3(s, s, s);
             }
         }
