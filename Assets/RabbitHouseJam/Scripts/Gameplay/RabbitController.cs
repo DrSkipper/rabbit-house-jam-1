@@ -18,8 +18,7 @@ public class RabbitController : MonoBehaviour
             // Eat the food if we're close enough
             if (Vector2.Distance(targetPos, ourPos) < this.ConsumeDistance)
             {
-                GlobalEvents.Notifier.SendEvent(new FoodDestroyedEvent(target));
-                Destroy(target.gameObject);
+                target.GetComponent<Food>().Consume();
             }
             else
             {

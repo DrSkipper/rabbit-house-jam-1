@@ -22,7 +22,7 @@ public class RabbitAnimBehavior : MonoBehaviour {
         {
             anim = GetComponent<Animation>();
             anim.Play(anim.clip.name);
-            timer = 2;
+            timer = 0.2f;
         }
         timer -= Time.deltaTime;
 	}
