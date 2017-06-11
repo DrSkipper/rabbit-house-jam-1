@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.XR.iOS;
 
 public class FoodManager : MonoBehaviour
 {
@@ -28,7 +29,32 @@ public class FoodManager : MonoBehaviour
             var touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
             {
-                //TODO: AR stuff
+                var screenPosition = Camera.main.ScreenToViewportPoint(touch.position);
+                ARPoint point = new ARPoint
+                {
+                    x = screenPosition.x,
+                    y = screenPosition.y
+                };
+
+                // prioritize reults types
+                ARHitTestResultType[] resultTypes = {
+                ARHitTestResultType.ARHitTestResultTypeExistingPlaneUsingExtent, 
+                // if you want to use infinite planes use this:
+                //ARHitTestResultType.ARHitTestResultTypeExistingPlane,
+                ARHitTestResultType.ARHitTestResultTypeHorizontalPlane,
+                ARHitTestResultType.ARHitTestResultTypeFeaturePoint
+                };
+
+                foreach (ARHitTestResultType resultType in resultTypes)
+                {
+                    List<ARHitTestResult> hitResults = UnityARSessionNativeInterface.GetARSessionNativeInterface().HitTest(point, resultType);
+                    if (hitResults.Count > 0)
+                    {
+                        var hitResult = hitResults[0];
+                        if (attemptCreateFood(UnityARMatrixOps.GetPosition(hitResult.worldTransform)))
+                            return;
+                    }
+                }
             }
         }
         else if (Input.GetMouseButtonDown(0))
@@ -39,16 +65,7 @@ public class FoodManager : MonoBehaviour
             float distance = 0;
             if (_foodPlane.Raycast(ray, out distance))
             {
-                Vector3 position = ray.GetPoint(distance);
-
-                // Make sure we clicked in a reachable position
-                UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
-                if (UnityEngine.AI.NavMesh.CalculatePath(this.transform.position, position, int.MaxValue, path))
-                {
-                    GameObject food = Instantiate<GameObject>(this.FoodPrefabs[Random.Range(0, this.FoodPrefabs.Count - 1)]);
-                    food.AddComponent<Food>();
-                    food.transform.position = position;
-                }
+                attemptCreateFood(ray.GetPoint(distance));
             }
         }
     }
@@ -68,6 +85,20 @@ public class FoodManager : MonoBehaviour
             }
         }
         return retVal;
+    }
+
+    private bool attemptCreateFood(Vector3 position)
+    {
+        // Make sure we clicked in a reachable position
+        UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
+        if (UnityEngine.AI.NavMesh.CalculatePath(this.transform.position, position, int.MaxValue, path))
+        {
+            GameObject food = Instantiate<GameObject>(this.FoodPrefabs[Random.Range(0, this.FoodPrefabs.Count - 1)]);
+            food.AddComponent<Food>();
+            food.transform.position = position;
+            return true;
+        }
+        return false;
     }
 
     private void onFoodSpawn(LocalEventNotifier.Event e)
