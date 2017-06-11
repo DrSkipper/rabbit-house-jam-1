@@ -3,15 +3,47 @@ using System.Collections.Generic;
 
 public class FoodManager : MonoBehaviour
 {
+    public List<GameObject> FoodPrefabs;
+    public float FoodHeight;
+
+    [HideInInspector]
     public List<Transform> Food;
+
     private static FoodManager _instance;
+    private Plane _foodPlane;
 
     void Awake()
     {
         _instance = this;
         this.Food = new List<Transform>();
+        _foodPlane = new Plane(Vector3.up, new Vector3(0, this.FoodHeight, 0));
         GlobalEvents.Notifier.Listen(FoodSpawnEvent.NAME, this, onFoodSpawn);
         GlobalEvents.Notifier.Listen(FoodDestroyedEvent.NAME, this, onFoodDestroyed);
+    }
+
+    void Update()
+    {
+        if (Input.touchCount > 0)
+        {
+            var touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                //TODO: AR stuff
+            }
+        }
+        else if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            // Plane.Raycast stores the distance from ray.origin to the hit point in this variable:
+            float distance = 0;
+            if (_foodPlane.Raycast(ray, out distance))
+            {
+                GameObject food = Instantiate<GameObject>(this.FoodPrefabs[Random.Range(0, this.FoodPrefabs.Count - 1)]);
+                food.AddComponent<Food>();
+                food.transform.position = ray.GetPoint(distance);
+            }
+        }
     }
 
     public static Transform GetClosestFood(Transform source)
