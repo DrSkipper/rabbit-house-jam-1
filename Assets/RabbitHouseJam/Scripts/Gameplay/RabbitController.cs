@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 public class RabbitController : MonoBehaviour
 {
     public float Speed = 10.0f;
     public float RotationSpeed = 10.0f;
     public float ConsumeDistance = 2.0f;
+    public MoveTo MoveTo;
+    public NavMeshAgent Agent;
+    private Transform _target;
 
     void Update()
     {
@@ -13,7 +17,7 @@ public class RabbitController : MonoBehaviour
         if (target != null)
         {
             Vector2 ourPos = realPosToSimulationPos(this.transform.position);
-            Vector2 targetPos = realPosToSimulationPos(target.position);
+            Vector2 targetPos = realPosToSimulationPos(target == _target && this.Agent.hasPath ? this.Agent.pathEndPosition : target.position);
 
             // Eat the food if we're close enough
             if (Vector2.Distance(targetPos, ourPos) < this.ConsumeDistance)
@@ -22,12 +26,8 @@ public class RabbitController : MonoBehaviour
             }
             else
             {
-
-                this.transform.position = applySimulationPosToRealPos(Vector2.MoveTowards(ourPos, targetPos, this.Speed * Time.deltaTime), this.transform.position);
-
-                Quaternion targetRotation = Quaternion.LookRotation(new Vector3(targetPos.x, this.transform.position.y, targetPos.y) - this.transform.position);
-                float str = Mathf.Min(this.RotationSpeed * Time.deltaTime, 1);
-                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, targetRotation, str);
+                _target = target;
+                this.MoveTo.MoveToward(target);
             }
         }
     }

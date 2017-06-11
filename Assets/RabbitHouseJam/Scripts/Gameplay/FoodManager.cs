@@ -39,9 +39,16 @@ public class FoodManager : MonoBehaviour
             float distance = 0;
             if (_foodPlane.Raycast(ray, out distance))
             {
-                GameObject food = Instantiate<GameObject>(this.FoodPrefabs[Random.Range(0, this.FoodPrefabs.Count - 1)]);
-                food.AddComponent<Food>();
-                food.transform.position = ray.GetPoint(distance);
+                Vector3 position = ray.GetPoint(distance);
+
+                // Make sure we clicked in a reachable position
+                UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
+                if (UnityEngine.AI.NavMesh.CalculatePath(this.transform.position, position, int.MaxValue, path))
+                {
+                    GameObject food = Instantiate<GameObject>(this.FoodPrefabs[Random.Range(0, this.FoodPrefabs.Count - 1)]);
+                    food.AddComponent<Food>();
+                    food.transform.position = position;
+                }
             }
         }
     }
