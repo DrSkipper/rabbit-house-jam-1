@@ -5,6 +5,7 @@ using UnityEngine;
 public class RabbitAnimBehavior : MonoBehaviour {
 
     public Animation anim;
+    public bool constantLoopAnim = true;
     private float timer = 0;
 
     IEnumerator Start()
@@ -17,7 +18,7 @@ public class RabbitAnimBehavior : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if (!anim.isPlaying && timer <= 0 )
+        if (!anim.isPlaying)
         {
             anim = GetComponent<Animation>();
             anim.Play(anim.clip.name);
