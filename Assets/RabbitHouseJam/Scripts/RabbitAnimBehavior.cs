@@ -21,9 +21,9 @@ public class RabbitAnimBehavior : MonoBehaviour {
         {
             anim = GetComponent<Animation>();
             anim.Play(anim.clip.name);
-            timer = 100;
+            timer = 10;
         }
-        timer -= 1;
+        timer -= Time.deltaTime;
 	}
 
 }
