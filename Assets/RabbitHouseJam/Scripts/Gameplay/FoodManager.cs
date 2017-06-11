@@ -29,6 +29,7 @@ public class FoodManager : MonoBehaviour
             var touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
             {
+                Debug.Log("Touch detected");
                 var screenPosition = Camera.main.ScreenToViewportPoint(touch.position);
                 ARPoint point = new ARPoint
                 {
@@ -90,15 +91,16 @@ public class FoodManager : MonoBehaviour
     private bool attemptCreateFood(Vector3 position)
     {
         // Make sure we clicked in a reachable position
-        UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
+        /*UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
         if (UnityEngine.AI.NavMesh.CalculatePath(this.transform.position, position, int.MaxValue, path))
-        {
+        {*/
+        Debug.Log("Creating Food");
             GameObject food = Instantiate<GameObject>(this.FoodPrefabs[Random.Range(0, this.FoodPrefabs.Count - 1)]);
             food.AddComponent<Food>();
             food.transform.position = position;
             return true;
-        }
-        return false;
+        /*}
+        return false;*/
     }
 
     private void onFoodSpawn(LocalEventNotifier.Event e)
