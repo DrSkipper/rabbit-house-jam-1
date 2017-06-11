@@ -17,7 +17,7 @@ public class RabbitController : MonoBehaviour
         if (target != null)
         {
             Vector2 ourPos = realPosToSimulationPos(this.transform.position);
-            Vector2 targetPos = realPosToSimulationPos(target == _target ? this.Agent.pathEndPosition : target.position);
+            Vector2 targetPos = realPosToSimulationPos(target == _target && this.Agent.hasPath ? this.Agent.pathEndPosition : target.position);
 
             // Eat the food if we're close enough
             if (Vector2.Distance(targetPos, ourPos) < this.ConsumeDistance)
