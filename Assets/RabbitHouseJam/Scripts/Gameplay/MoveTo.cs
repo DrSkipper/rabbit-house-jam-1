@@ -1,21 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.AI;
 
-public class MoveTo : MonoBehaviour {
-
+public class MoveTo : MonoBehaviour
+{
     public Transform goal;
-	// Use this for initialization
+    public bool MoveOnStart = false;
+    public NavMeshAgent Agent;
+
 	void Start () {
 
-        UnityEngine.AI.NavMeshAgent agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        agent.destination = goal.position; 
+        if (this.MoveOnStart)
+            this.MoveToward(goal);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 
-	}
-       
+    public void MoveToward(Transform target)
+    {
+        goal = target;
+        this.Agent.destination = goal.position;
+    }
 }
