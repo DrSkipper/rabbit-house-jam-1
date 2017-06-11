@@ -12,7 +12,6 @@ public class RabbitAnimBehavior : MonoBehaviour {
         anim = GetComponent<Animation>();
         anim.Play(anim.clip.name);
         yield return new WaitForSeconds(anim.clip.length);
-        
     }
 
 	// Update is called once per frame
@@ -21,7 +20,7 @@ public class RabbitAnimBehavior : MonoBehaviour {
         {
             anim = GetComponent<Animation>();
             anim.Play(anim.clip.name);
-            timer = 100;
+            timer = 2;
         }
         timer -= 1;
 	}
