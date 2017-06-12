@@ -11,6 +11,7 @@ public class RabbitAnimBehavior : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
         if (!anim.isPlaying)
         {
             anim = GetComponent<Animation>();
