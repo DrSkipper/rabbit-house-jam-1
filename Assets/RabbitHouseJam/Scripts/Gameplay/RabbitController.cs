@@ -8,6 +8,10 @@ public class RabbitController : MonoBehaviour
     public float ConsumeDistance = 2.0f;
     public MoveTo MoveTo;
     public NavMeshAgent Agent;
+    public Animation AnimBehavior;
+    public AnimationClip RunClip;
+    public AnimationClip IdleClip;
+
     private Transform _target;
 
     void Update()
@@ -16,6 +20,13 @@ public class RabbitController : MonoBehaviour
         Transform target = FoodManager.GetClosestFood(this.transform);
         if (target != null)
         {
+            if (this.AnimBehavior.clip != this.RunClip)
+            {
+                this.AnimBehavior.Stop();
+                this.AnimBehavior.clip = this.RunClip;
+                this.AnimBehavior.Play();
+            }
+
             Vector2 ourPos = realPosToSimulationPos(this.transform.position);
             Vector2 targetPos = realPosToSimulationPos(target == _target && this.Agent.hasPath ? this.Agent.pathEndPosition : target.position);
 
@@ -29,6 +40,12 @@ public class RabbitController : MonoBehaviour
                 _target = target;
                 this.MoveTo.MoveToward(target);
             }
+        }
+        else if (this.AnimBehavior.clip != this.IdleClip)
+        {
+            this.AnimBehavior.Stop();
+            this.AnimBehavior.clip = this.IdleClip;
+            this.AnimBehavior.Play();
         }
     }
 
