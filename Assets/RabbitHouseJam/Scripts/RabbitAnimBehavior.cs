@@ -8,10 +8,12 @@ public class RabbitAnimBehavior : MonoBehaviour {
     public bool constantLoopAnim = true;
     private float timer = 0;
 
+	void Start () {
+		anim = GetComponent<Animation>();
+	}
 
 	// Update is called once per frame
 	void Update () {
-
         if (!anim.isPlaying)
         {
             anim = GetComponent<Animation>();
