@@ -7,6 +7,7 @@ public class FoodManager : MonoBehaviour
     public List<GameObject> FoodPrefabs;
     public float FoodHeight;
     public Vector3 AROffset;
+    public Vector3 FoodScale;
 
     [HideInInspector]
     public List<Transform> Food;
@@ -92,14 +93,15 @@ public class FoodManager : MonoBehaviour
     private bool attemptCreateFood(Vector3 position)
     {
         // Make sure we clicked in a reachable position
-        UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
-        bool check = UnityEngine.AI.NavMesh.CalculatePath(this.transform.position, position, int.MaxValue, path);
+        //UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
+        //bool check = UnityEngine.AI.NavMesh.CalculatePath(this.transform.position, position, int.MaxValue, path);
         //{
-        Debug.Log("Creating Food, check: " + check);
-            GameObject food = Instantiate<GameObject>(this.FoodPrefabs[Random.Range(0, this.FoodPrefabs.Count - 1)]);
-            food.AddComponent<Food>();
-            food.transform.position = position;
-            return true;
+        //Debug.Log("Creating Food, check: " + check);
+        GameObject food = Instantiate<GameObject>(this.FoodPrefabs[Random.Range(0, this.FoodPrefabs.Count - 1)]);
+        food.AddComponent<Food>();
+        food.transform.position = position;
+        food.transform.localScale = this.FoodScale;
+        return true;
         /*}
         return false;*/
     }

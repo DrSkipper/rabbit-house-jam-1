@@ -4,7 +4,7 @@ public class Food : MonoBehaviour
 {
     public const float ROTATION_SPEED = 2.5f;
     public const float DEATH_DURATION = 0.2f;
-    public const float END_SCALE = 1.7f;
+    public const float END_SCALE = 0.8f;
     private bool _dying;
     private float _deathTime;
 
